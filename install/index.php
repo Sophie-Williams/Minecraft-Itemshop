@@ -107,9 +107,11 @@ query_basic( "CREATE TABLE `config` (
 //User
 query_basic( "DROP TABLE IF EXISTS `user`;" );
 query_basic( "CREATE TABLE `user` (
-		`login` TEXT NOT NULL,
+		`id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+		`username` TEXT NOT NULL,
         `password` TEXT NOT NULL,
-		`session` TEXT NOT NULL
+		`session` TEXT NOT NULL,
+		KEY `setting` (`id`)
 		) ENGINE=MyISAM;" );
 
 query_basic( "INSERT INTO `config` VALUES ('Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień');" );

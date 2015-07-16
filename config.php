@@ -5,14 +5,14 @@ define('DBHOST', '');
 // Nazwa bazy danych
 define('DBNAME', '');
 
-// Nazwa uÅ¼ytkownika bazy danych
+// Nazwa u¿ytkownika bazy danych
 define('DBUSER', '');
 
-// HasÅ‚o do bazy danych
+// Has³o do bazy danych
 define('DBPASSWORD', '');
 	
 /**
- * WyÅ›wietlanie bÅ‚Ä™dÃ³w
+ * Wyœwietlanie b³êdów
  */
 error_reporting(E_ALL);
 ?>
