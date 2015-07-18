@@ -78,17 +78,19 @@ require("../include/mysql.php");
 query_basic( "DROP TABLE IF EXISTS `menu`;" );
 query_basic( "CREATE TABLE `menu` (
 		  `position` TEXT NOT NULL,
-		  `name` text NOT NULL,
-		  `address` text NOT NULL
+		  `name` TEXT NOT NULL,
+		  `address` TEXT NOT NULL
 		) ENGINE=MyISAM;" );
 
 //Sms
 query_basic( "DROP TABLE IF EXISTS `sms`;" );
 query_basic( "CREATE TABLE `sms` (
 		  `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-		  `csms` text NOT NULL,
-		  `nsms` text NOT NULL,
-		  `asms` text NOI NULL
+		  `csms` TEXT NOT NULL,
+		  `nsms` TEXT NOT NULL,
+		  `asms` TEXT NOT NULL,
+		  `assms` TEXT NOT NULL,
+		  KEY `sms` (`id`)
 		) ENGINE=MyISAM;" );
 		
 //Oferts
@@ -99,8 +101,8 @@ query_basic( "CREATE TABLE `offerts` (
         `name` TEXT NOT NULL,
         `commends` TEXT NOT NULL,
         `description` TEXT NOT NULL,
-        `amount` TEXT NOT NULL,
-		KEY `setting` (`id`)
+        `amount` int(8) NOT NULL,
+		KEY `offerts` (`id`)
 		) ENGINE=MyISAM;" );
 
 //config
@@ -120,7 +122,7 @@ query_basic( "CREATE TABLE `user` (
 		`username` TEXT NOT NULL,
         `password` TEXT NOT NULL,
 		`session` TEXT NOT NULL,
-		KEY `setting` (`id`)
+		KEY `user` (`id`)
 		) ENGINE=MyISAM;" );
 
 query_basic( "INSERT INTO `config` VALUES ('Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień');" );

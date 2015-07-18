@@ -23,7 +23,11 @@ if(isLoggedIn() == TRUE)
 	die();
 }
 
-if(isset($_GET['id']))
+if(isset($_POST['id']))
+{
+	$id = mysql_real_escape_string($_POST['id']);
+}
+else if(isset($_GET['id']))
 {
 	$id = mysql_real_escape_string($_GET['id']);
 }
@@ -54,6 +58,7 @@ if(isset($_GET['id']))
                     <li <?php if($_GET['page'] == 1) {echo 'class="active"';} ?>><a href="?page=1"><font><font>Ustawienia</font></font></a></li>
                     <li <?php if($_GET['page'] == 2) {echo 'class="active"';} ?>><a href="?page=2"><font><font>Oferty</font></font></a></li>
                     <li <?php if($_GET['page'] == 3) {echo 'class="active"';} ?>><a href="?page=3"><font><font>Menu</font></font></a></li>
+                    <li <?php if($_GET['page'] == 4) {echo 'class="active"';} ?>><a href="?page=4"><font><font>Sms</font></font></a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     <li><a href="loginprocess.php?task=logout"><font><font>Wyloguj</font></font></a></li>
@@ -63,7 +68,7 @@ if(isset($_GET['id']))
                 </div>
               </div>
             </div>
-           </br>
+           <br />
     <?php
 	//----------------------------------------------------
 	if($_GET['page'] == '1')
@@ -82,18 +87,20 @@ if(isset($_GET['id']))
 			<br />
 			Api<input placeholder="Port serwera" value="<?php echo $data['api']  ?>" style="width:600px" type="text" class="form-control" name="api">
 			<br />
-			<input type="submit" class="btn btn-primary" value="Zapisz">
+			<input type="submit" class="btn btn-primary" value="Zapisz zmiany!">
 		</form>
         <br />
 		<br />
 		<div class="well" style="width:600px">
 			Informacje:
             <br />
-            1. W api kod przejmuje alias: "{KOD}"
+            1. W api kod przejmuje alias: {CODE}
             <br />
-            1. W api numer sms przejmuje alias: "{NSMS}"
+            2. W api numer sms przejmuje alias: {NSMS}
             <br />
-            1. W api kwotę sms przejmuje alias: "{ASMS}"
+            3. W api kwotę sms przejmuje alias: {ASMS}
+            <br />
+            4. W api kwotę doładowania sms przejmuje alias: {ASSMS}
             <br />
 		</div>
 		<?php
@@ -118,13 +125,14 @@ if(isset($_GET['id']))
         $offerts = mysql_query("SELECT * FROM `offerts`"); 
         while($rowsOfferts = mysql_fetch_assoc($offerts))
 		{
+			$amount = query_fetch_assoc( "SELECT `asms` FROM `sms` WHERE `id` = '".$rowsOfferts['amount']."' LIMIT 1" );
         ?>
 			<div class="bs-example table-responsive">
 				<tr>
 					<th style="max-width:1px"><font><font><?php echo $rowsOfferts['id']; ?></font></font></th>
 					<th style="max-width:150px; height:150"><font><font><img style="width:150px; height:150px;" src="<?php echo $rowsOfferts['icon']; ?>"></font></font></th>
 					<th style="max-width:75px"><font><font><?php echo $rowsOfferts['name']; ?></font></font></th>
-					<th style="max-width:50px"><font><font><?php echo $rowsOfferts['amount']; ?></font></font></th>
+					<th style="max-width:50px"><font><font><?php echo $amount['asms']; ?></font></font></th>
 					<th style="max-width:200px"><center><font><font><?php echo '<a href="?page=offertsedit&id='.$rowsOfferts['id'].'" class="btn btn-default">Edycja</a>' ?>&nbsp;<?php echo '<a href="process.php?task=offertsdelete&id='.$rowsOfferts['id'].'" class="btn btn-danger">Usuń</a>' ?></font></font></center></th>
 				</tr>
     <?php
@@ -137,29 +145,24 @@ if(isset($_GET['id']))
 	//----------------------------------------------------
 	if($_GET['page'] == 'offertsadd')
 	{
+		$sms = mysql_query( "SELECT `id`, `asms` FROM `sms` ORDER BY `asms`" );
 	?>
 		<form action="process.php" method="post">
             <input type="hidden" name="task" value="offertsadd" />
-            Ikona<input type="text" name="icon" class="form-control" style="width:600px" placeholder="Ikonka" /></br>
-            Nazwa<input type="text" name="name" class="form-control" style="width:600px" placeholder="Nazwa" /></br>
-            Opis<input type="text" name="description" class="form-control" style="width:600px" placeholder="Opis" /></br>
-            Komenda/y<input type="text" name="commends" class="form-control" style="width:600px" placeholder="Komenda/y" /></br>
+            Ikona<input type="text" name="icon" class="form-control" style="width:600px" placeholder="Ikonka" /><br />
+            Nazwa<input type="text" name="name" class="form-control" style="width:600px" placeholder="Nazwa" /><br />
+            Opis<input type="text" name="description" class="form-control" style="width:600px" placeholder="Opis" /><br />
+            Komenda/y<input type="text" name="commends" class="form-control" style="width:600px" placeholder="Komenda/y" /><br />
             Kwota sms'a<select class="form-control" name="amount" style="width:600px;">
-            <option>0.62</option>
-            <option>1.23</option>
-            <option>2.46</option>
-            <option>3.69</option>
-            <option>4.92</option>
-            <option>6.15</option>
-            <option>7.38</option>
-            <option>11.07</option>
-            <option>12.30</option>
-            <option>13.53</option>
-            <option>17.22</option>
-            <option>23.37</option>
-            <option>24.60</option>
-            <option>30.75</option>
-            </select>
+				<?php
+                while ($rowsSms = mysql_fetch_assoc($sms))
+                {
+                    ?>
+                    <option value="<?php echo $rowsSms['id']; ?>">#<?php echo $rowsSms['id'].' - '.htmlspecialchars($rowsSms['asms'], ENT_QUOTES); ?> zł</option>
+                    <?php
+                }
+                ?>
+			</select>
             <br />
             <input type="submit" class="btn btn-primary" value="Stwórz nową ofertę!" />
         </form>
@@ -175,44 +178,41 @@ if(isset($_GET['id']))
 	<?php
 	}
 	//----------------------------------------------------
-	if($_GET['page'] == 'offertsedit')
+	if($_GET['page'] == 'offertsedit' && isset($id))
 	{
-		$data = query_fetch_assoc( "SELECT * FROM `offerts` WHERE `id` = '".$id."' " ); 
+		$data = query_fetch_assoc( "SELECT * FROM `offerts` WHERE `id` = '".$id."'" );
+		 
+		$sms = mysql_query( "SELECT `id`, `asms` FROM `sms` ORDER BY `asms`" );
 		{
 			{
 			?>
 			<form action="process.php" method="post">
             	<input type="hidden" name="task" value="offertsedit" />
-			Ikona<input value="<?php echo $data['icon']; ?>" type="text" name="icon" class="form-control" style="width:600px" placeholder="Ikonka" /></br>
-			Nazwa<input value="<?php echo $data['name']; ?>" type="text" name="name" class="form-control" style="width:600px" placeholder="Nazwa" /></br>
-			Opis<input value="<?php echo $data['description']; ?>" type="text" name="description" class="form-control" style="width:600px" placeholder="Opis" /></br>
-			Komenda/y<input value="<?php echo $data['commends']; ?>" type="text" name="commends" class="form-control" style="width:600px" placeholder="Komenda/y" /></br>
-			Kwota sms'a<select class="form-control" name="account" style="width:600px;">
-                    <option>0.62</option>
-                    <option>1.23</option>
-                    <option>2.46</option>
-                    <option>3.69</option>
-                    <option>4.92</option>
-                    <option>6.15</option>
-                    <option>7.38</option>
-                    <option>11.07</option>
-                    <option>12.30</option>
-                    <option>13.53</option>
-                    <option>17.22</option>
-                    <option>23.37</option>
-                    <option>24.60</option>
-                    <option>30.75</option>
-                </select>
-                </br>
-                <input type="submit" class="btn btn-primary" value="Zapisz zmiany w tej ofercie!" />
+                <input type="hidden" name="id" value="<?php echo $id; ?>" />
+			Ikona<input value="<?php echo $data['icon']; ?>" type="text" name="icon" class="form-control" style="width:600px" placeholder="Ikonka" /><br />
+			Nazwa<input value="<?php echo $data['name']; ?>" type="text" name="name" class="form-control" style="width:600px" placeholder="Nazwa" /><br />
+			Opis<input value="<?php echo $data['description']; ?>" type="text" name="description" class="form-control" style="width:600px" placeholder="Opis" /><br />
+			Komenda/y<input value="<?php echo $data['commends']; ?>" type="text" name="commends" class="form-control" style="width:600px" placeholder="Komenda/y" /><br />
+			 Kwota sms'a<select class="form-control" name="amount" style="width:600px;">
+				<?php
+                while ($rowsSms = mysql_fetch_assoc($sms))
+                {
+                    ?>
+                    <option <?php if($data['amount'] == $rowsSms['id']) {echo 'selected';} ?> value="<?php echo $rowsSms['id']; ?>">#<?php echo $rowsSms['id'].' - '.htmlspecialchars($rowsSms['asms'], ENT_QUOTES); ?> zł</option>
+                    <?php
+                }
+                ?>
+			</select>
+                <br />
+                <input type="submit" class="btn btn-primary" value="Zapisz zmiany!" />
             </form>
-			</br>
-			</br>
+			<br />
+			<br />
 			<div class="well" style="width:600px">
 			Informacje:
-			</br>
+			<br />
 			1. Nick gracza w komendach przejmuje alias: "{NICK}"
-			<br>
+			<br />
 			2. Jeżeli chcesz wpisać więcej niż jedną komendę oddzielaj je: "," po przecinku nie rób spacji aby komenda została wykonana!
 			</div>
 			<?php
@@ -255,14 +255,89 @@ if(isset($_GET['id']))
 		<form action="process.php" method="post">
             <input type="hidden" value="menuadd" name="task" />
             Pozycja <input style="width:600px" type="text" name="position" placeholder="Pozycja odnośnika" class="form-control" />
-            </br>
+            <br />
             Nazwa <input style="width:600px" type="text" name="name" placeholder="Zazwa odnośnika" class="form-control" />
-            </br>
+            <br />
             Adres <input style="width:600px" type="text" name="address" placeholder="Adres odnośnika" class="form-control" />
-            </br>
+            <br />
             <input type="submit" class="btn btn-primary" value="Dodaj" />
 		</form>
     <?php
+	}
+	//----------------------------------------------------
+	if($_GET['page'] == 4)
+	{
+	?>
+        <a href="?page=smsadd" class="btn btn-info">Dodaj nowy sms</a>
+        <br />
+        <br />
+        <table class="table table-striped table-hover">
+            <tr>
+                <td>Id</td>
+                <td>Treść sms</td>
+                <td>Numer sms</td>
+                <td>Kwota sms</td>
+                <td>Kwota doładowania</td>
+                <td>Opcja</td>
+            </tr>
+		<?php
+        $sms = mysql_query( "SELECT * FROM `sms` ORDER BY `id`" ); 
+        while($rowsSms = mysql_fetch_assoc($sms))
+		{
+        ?>
+            <div class="bs-example table-responsive">
+                <tr>
+                    <th><font><font><?php echo $rowsSms['id']; ?></font></font></th>
+                    <th><font><font><?php echo $rowsSms['csms']; ?></font></font></th>
+                    <th><font><font><?php echo $rowsSms['nsms']; ?></font></font></th>
+                    <th><font><font><?php echo $rowsSms['asms']; ?></font></font></th>
+                    <th><font><font><?php echo $rowsSms['assms']; ?></font></font></th>
+                    <th><center><font><font><?php echo '<a href="?page=smssedit&id='.$rowsSms['id'].'" class="btn btn-default">Edycja</a>' ?>&nbsp;<?php echo '<a href="process.php?task=smsdelete&id='.$rowsSms['id'].'" class="btn btn-danger">Usuń</a>' ?></font></font></center</th>
+                </tr>
+        <?php
+        }
+	}
+	//----------------------------------------------------
+	if($_GET['page'] == 'smsadd')
+	{
+		?>
+		<form action="process.php" method="post">
+            <input type="hidden" value="smsadd" name="task" />
+            Treść <input style="width:600px" type="text" name="csms" placeholder="Treść sms" class="form-control" />
+            <br />
+            Numer <input style="width:600px" type="text" name="nsms" placeholder="Numer sms" class="form-control" />
+            <br />
+            Kwota <input style="width:600px" type="text" name="asms" placeholder="Kwota sms" class="form-control" />
+            <br />
+            Kwota doładowania <input style="width:600px" type="text" name="assms" placeholder="Kwota doładowania sms" class="form-control" />
+            <br />
+            <input type="submit" class="btn btn-primary" value="Dodaj" />
+		</form>
+    <?php
+	}
+	//----------------------------------------------------
+	if($_GET['page'] == 'smsedit' && isset($id))
+	{
+		$data = query_fetch_assoc( "SELECT * FROM `sms` WHERE `id` = '".$id."' " ); 
+		{
+			{
+			?>
+			<form action="process.php" method="post">
+            	<input type="hidden" name="task" value="smsedit" />
+                <input type="hidden" name="id" value="<?php echo $data['id'] ?>" />
+			Treść <input style="width:600px" type="text" name="csms" value="<?php echo $data['csms'] ?>" placeholder="Treść sms" class="form-control" />
+            <br />
+            Numer <input style="width:600px" type="text" name="nsms" value="<?php echo $data['nsms']; ?>" placeholder="Numer sms" class="form-control" />
+            <br />
+            Kwota <input style="width:600px" type="text" name="asms" value="<?php echo $data['asms']; ?>" placeholder="Kwota sms" class="form-control" />
+            <br />
+            Kwota doładowania <input style="width:600px" type="text" name="assms" value="<?php echo $data['assms']; ?>" placeholder="Kwota doładowania sms" class="form-control" />
+            	<br />
+                <input type="submit" class="btn btn-primary" value="Zapisz zmiany!" />
+            </form>
+			<?php
+			}
+		}
 	}
 	?>
 	             </div>

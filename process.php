@@ -96,6 +96,8 @@ switch(@$task)
 		die();
 		break;
 		
+//----------------------------------------------------
+		
 	case 'offertsadd':
 		$icon = mysql_real_escape_string($_POST['icon']);
 		$name = mysql_real_escape_string($_POST['name']);
@@ -128,6 +130,10 @@ switch(@$task)
 		if(!is_numeric($amount))
 		{
 			$error .= 'Brak kwoty. ';
+		}
+		if(query_numrows( "SELECT `csms` FROM `sms` WHERE `id` = '".$amount."'" ) == 0)
+		{
+			$error .= 'Taki sms nie istnieje. ';
 		}
 		###
 		if(!empty($error))
@@ -226,7 +232,11 @@ switch(@$task)
 		}
 		if(!is_numeric($amount))
 		{
-			$error .= 'Brak kwoty. ';
+			$error .= 'Nieprawidłowy format kwoty. ';
+		}
+		if(query_numrows( "SELECT `csms` FROM `sms` WHERE `id` = '".$amount."'" ) == 0)
+		{
+			$error .= 'Taki sms nie istnieje. ';
 		}
 		if(empty($id)) {
 			$error .= 'Brak id. ';
@@ -255,6 +265,8 @@ switch(@$task)
 		header( "Location: admin.php?page=2" );
 		die();
 		break;
+
+//----------------------------------------------------
 		
 	case 'menuadd':
 		$position = mysql_real_escape_string($_POST['position']);
@@ -329,6 +341,173 @@ switch(@$task)
 		$_SESSION['msg1'] = 'Pomyślnie usunięto odnośnik!';
 		$_SESSION['msg-type'] = 'success';
 		header( "Location: admin.php?page=3" );
+		die();
+		break;
+		
+//----------------------------------------------------
+
+	case 'smsadd':
+		$csms = mysql_real_escape_string($_POST['csms']);
+		$nsms = mysql_real_escape_string($_POST['nsms']);
+		$asms = mysql_real_escape_string($_POST['asms']);
+		$assms = mysql_real_escape_string($_POST['assms']);
+		###
+		$error = '';
+		###
+		if(empty($csms))
+		{
+			$error .= 'Brak treści sms. ';
+		}
+		if(empty($nsms))
+		{
+			$error .= 'Brak numeru sms. ';
+		}
+		if(!is_numeric($nsms))
+		{
+			$error .= 'Nieprawidłowy numer sms. ';
+		}
+		if(empty($asms))
+		{
+			$error .= 'Kwota sms. ';
+		}
+		if(!is_numeric($asms))
+		{
+			$error .= 'Nieprawidłowa kwota sms. ';
+		}
+		if(empty($assms))
+		{
+			$error .= 'Brak kwoty doładowania sms. ';
+		}
+		if(!is_numeric($assms))
+		{
+			$error .= 'Nieprawidłowa kwota doładowania sms. ';
+		}
+		###
+		if(!empty($error))
+		{
+			$_SESSION['msg1'] = $error;
+			$_SESSION['msg-type'] = 'danger';
+			unset($error);
+			header( "Location: admin.php?page=4" );
+			die();
+		}
+		###
+		query_basic( "INSERT INTO `sms` SET
+			`csms` = '".$csms."',
+			`nsms` = '".$nsms."',
+			`asms` = '".$asms."',
+			`assms` = '".$assms."'" );
+		###
+		$_SESSION['msg1'] = 'Sms został dodany!';
+		$_SESSION['msg-type'] = 'success';
+		header( "Location: admin.php?page=4" );
+		die();
+		break;
+		
+	case 'smsdelete':
+		if(isset($_POST['id']))
+		{
+		$id = mysql_real_escape_string($_POST['id']);
+		}
+		else if(isset($_GET['id']))
+		{
+		$id = mysql_real_escape_string($_GET['id']);
+		}
+		###
+		$error = '';
+		###
+		if(empty($id))
+		{
+			$error .= 'Brak id. ';
+		}
+		if(!is_numeric($id))
+		{
+			$error .= 'Id sms jest nieprawidłowe. ';
+		}
+		if(query_numrows( "SELECT `name` FROM `sms` WHERE `id` = '".$id."'" ) == 0)
+		{
+			$error .= 'Taki sms nie istnieje. ';
+		}
+		###
+		if(!empty($error))
+		{
+			$_SESSION['msg1'] = $error;
+			$_SESSION['msg-type'] = 'danger';
+			unset($error);
+			header( "Location: admin.php?page=4" );
+			die();
+		}
+		###
+		query_basic( "DELETE FROM `sms` WHERE `id` = '".$id."'" );
+		###
+		$_SESSION['msg1'] = 'Pomyślnie usunięto sms o id:'.$id.'!';
+		$_SESSION['msg-type'] = 'success';
+		header( "Location: admin.php?page=2" );
+		die();
+		break;
+		
+	case 'smsedit':
+		$csms = mysql_real_escape_string($_POST['csms']);
+		$nsms = mysql_real_escape_string($_POST['nsms']);
+		$asms = mysql_real_escape_string($_POST['asms']);
+		$assms = mysql_real_escape_string($_POST['assms']);
+		$id = mysql_real_escape_string($_POST['id']);
+		###
+		$error = '';
+		###
+		if(empty($csms))
+		{
+			$error .= 'Brak treści sms. ';
+		}
+		if(empty($nsms))
+		{
+			$error .= 'Brak numeru sms. ';
+		}
+		if(!is_numeric($nsms))
+		{
+			$error .= 'Nieprawidłowy numer sms. ';
+		}
+		if(empty($asms))
+		{
+			$error .= 'Kwota sms. ';
+		}
+		if(!is_numeric($asms))
+		{
+			$error .= 'Nieprawidłowa kwota sms. ';
+		}
+		if(empty($assms))
+		{
+			$error .= 'Kwota doładowania sms. ';
+		}
+		if(!is_numeric($assms))
+		{
+			$error .= 'Nieprawidłowa kwota doładowania sms. ';
+		}
+		if(empty($id)) {
+			$error .= 'Brak id. ';
+		}
+		if(!is_numeric($id)) {
+			$error .= 'Id jest nieprawidłowe. ';
+		}
+		if(query_numrows( "SELECT `name` FROM `offerts` WHERE `id` = '".$id."'" ) == 0)
+		{
+			$error .= 'Taka oferta nie istnieje. ';
+		}
+		###
+		if(!empty($error))
+		{
+			$_SESSION['msg1'] = $error;
+			$_SESSION['msg-type'] = 'danger';
+			unset($error);
+			header( "Location: admin.php?page=4" );
+			die();
+		}
+		###
+		query_basic( "UPDATE `offerts` SET `csms`='".$csms."',`nsms`='".$nsms."',`asms`='".$asms."',`assms`='".$assms."' WHERE `id` = '".$id."'" );
+		###
+		$_SESSION['msg1'] = 'Pomyślnie uaktualniono sms o id:'.$id.'!';
+		$_SESSION['msg-type'] = 'success';
+		header( "Location: admin.php?page=4" );
 		die();
 		break;
 

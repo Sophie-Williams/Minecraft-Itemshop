@@ -61,65 +61,21 @@ if(!empty($id))
 	if(query_numrows( "SELECT `name` FROM `offerts` WHERE `id` = '".$id."'" ) == 1)
 	{
 		$offerts = query_fetch_assoc( "SELECT * FROM `offerts` WHERE `id` = '".$id."' LIMIT 150" );
+		
+		$sms = query_fetch_assoc( "SELECT `csms`, `nsms`, `asms` FROM `sms` WHERE `id` = '".$offerts['amount']."' LIMIT 1" );
 	?>
 		<p style="font-size: 25px">
-        	Wybrałeś Ofertę: <b><?php echo $offerts['name']; ?></b>, jej koszt wynosi <b><?php echo $offerts['amount']; ?></b> zł.
+        	Wybrałeś Ofertę: <b><?php echo $offerts['name']; ?></b>, jej koszt wynosi <b><?php echo $sms['asms']; ?></b> zł.
         </p>
 		</hr>
 		<p>
-        	Wyślij smsa o treści: <b>HPAY.FH</b> na numer: <b>
-			<?php
-            $kw = $offerts['amount'];
-            if($kw == '0.62') {
-            echo '7055';
-            $kw1 = '7055';
-            }else if($kw == '0.62') {
-            echo '7155';
-            $kw1 = '7155';
-            }else if($kw == '1.23') {
-            echo '7255';
-            $kw1 = '7255';
-            }else if($kw == '3.69') {
-            echo '7355';
-            $kw1 = '7355';
-            }else if($kw == '4.92') {
-            echo '7455';
-            $kw1 = '7455';
-            }else if($kw == '6.15') {
-            echo '7555';
-            $kw1 = '7555';
-            }else if($kw == '7.38') {
-            echo '7655';
-            $kw1 = '7655';
-            }else if($kw == '11.07') {
-            echo '7955';
-            $kw1 = '7955';
-            }else if($kw == '12.30') {
-            echo '91055';
-            $kw1 = '91055';
-            }else if($kw == '13.53') {
-            echo '91155';
-            $kw1 = '91155';
-            }else if($kw == '17.22') {
-            echo '91455';
-            $kw1 = '91455';
-            }else if($kw == '23.37') {
-            echo '91955';
-            $kw1 = '91955';
-            }else if($kw == '24.60') {
-            echo '92055';
-            $kw1 = '92055';
-            }else if($kw == '30.75') {
-            echo '92555';
-            $kw1 = '92555';
-            }
-            ?>
-			</b>.
+        	Wyślij smsa o treści: <b><?php echo $sms['csms']; ?></b> na numer: <b><?php echo $sms['nsms']; ?></b>.
 		</p>
         <br />
 		<div>
             <form method="post">
-                <input type="text" class="form-control" placeholder="Nick z serwera!"  name="nick">
+            	<input type="hidden" value="<?php echo $id; ?>" name="id">
+                <input type="text" class="form-control" placeholder="Nick z serwera!" name="nick">
                 <br>
                 <input type="text" class="form-control" placeholder="Kod z sms'a" name="code">
                 <br>
@@ -133,21 +89,22 @@ if(!empty($id))
 //----------------------------------------------------
 if(!empty($id) && isset($_POST['nick']) && isset($_POST['code']))
 {
-	if(query_numrows( "SELECT `name` FROM `offerts` WHERE `id` = '".$id."'" ) == 1)
+	if(query_numrows("SELECT `name` FROM `offerts` WHERE `id` = '".$id."'") == 1)
 	{
+		$offert = query_fetch_assoc("SELECT `amount` FROM `offerts` WHERE `id` = '".$id."'");
+		
 		$config = query_fetch_assoc("SELECT * FROM `config`");
+		
+		$sms = query_fetch_assoc("SELECT `nsms`, `asms`, `assms` FROM `sms` WHERE `id` = '".$offert['amount']."' LIMIT 1");
 		###
 		$nick = mysql_real_escape_string($_POST['nick']);
 		$code = mysql_real_escape_string($_POST['code']);
 		###
-		$api = @file_get_contents("http://fiberhost.pl/api/payment/api_code_verify.php?payment=homepay_sms&amount=".$amount."&userid=".$userid."&code=".$kod."");
-		
-		
-		
-		
-		
-		
-		//Dokończyć kwotę
+		$by = array("{CODE}", "{NSMS}", "{ASMS}", "{ASSMS}");
+		$after = array($code, $sms['nsms'], $sms['asms'], $sms['assms']);
+		$apicreate = str_replace($by, $after, $config['api']);
+		###
+		$api = @file_get_contents($apicreate);
 		###
 		if(isset($api))
 		{
