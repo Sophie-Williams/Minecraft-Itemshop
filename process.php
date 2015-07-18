@@ -54,7 +54,7 @@ switch(@$task)
 		{
 			$error .= 'Brak hasła rcon. ';
 		}
-		if(!is_numeric($password_rcon))
+		if(!is_numeric($port_rcon))
 		{
 			$error .= 'Nieprawidłowy port rcon. ';
 		}
