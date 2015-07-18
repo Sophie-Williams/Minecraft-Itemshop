@@ -81,6 +81,15 @@ query_basic( "CREATE TABLE `menu` (
 		  `name` text NOT NULL,
 		  `address` text NOT NULL
 		) ENGINE=MyISAM;" );
+
+//Sms
+query_basic( "DROP TABLE IF EXISTS `sms`;" );
+query_basic( "CREATE TABLE `sms` (
+		  `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+		  `csms` text NOT NULL,
+		  `nsms` text NOT NULL,
+		  `asms` text NOI NULL
+		) ENGINE=MyISAM;" );
 		
 //Oferts
 query_basic( "DROP TABLE IF EXISTS `offerts`;" );

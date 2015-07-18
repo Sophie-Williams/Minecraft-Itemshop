@@ -84,6 +84,18 @@ if(isset($_GET['id']))
 			<br />
 			<input type="submit" class="btn btn-primary" value="Zapisz">
 		</form>
+        <br />
+		<br />
+		<div class="well" style="width:600px">
+			Informacje:
+            <br />
+            1. W api kod przejmuje alias: "{KOD}"
+            <br />
+            1. W api numer sms przejmuje alias: "{NSMS}"
+            <br />
+            1. W api kwotę sms przejmuje alias: "{ASMS}"
+            <br />
+		</div>
 		<?php
 	}
 	//----------------------------------------------------
@@ -126,30 +138,31 @@ if(isset($_GET['id']))
 	if($_GET['page'] == 'offertsadd')
 	{
 	?>
-		<form action="process.php" method="post" />
-        <input type="hidden" name="task" value="offertsadd" />
-		Ikona<input type="text" name="icon" class="form-control" style="width:600px" placeholder="Ikonka" /></br>
-		Nazwa<input type="text" name="name" class="form-control" style="width:600px" placeholder="Nazwa" /></br>
-		Opis<input type="text" name="description" class="form-control" style="width:600px" placeholder="Opis" /></br>
-		Komenda/y<input type="text" name="commends" class="form-control" style="width:600px" placeholder="Komenda/y" /></br>
-		Kwota sms'a<select class="form-control" name="amount" style="width:600px;">
-		<option>0.62</option>
-		<option>1.23</option>
-		<option>2.46</option>
-		<option>3.69</option>
-		<option>4.92</option>
-		<option>6.15</option>
-		<option>7.38</option>
-		<option>11.07</option>
-		<option>12.30</option>
-		<option>13.53</option>
-		<option>17.22</option>
-		<option>23.37</option>
-		<option>24.60</option>
-		<option>30.75</option>
-		</select>
-		<br />
-		<input type="submit" class="btn btn-primary" value="Stwórz nową ofertę!" />
+		<form action="process.php" method="post">
+            <input type="hidden" name="task" value="offertsadd" />
+            Ikona<input type="text" name="icon" class="form-control" style="width:600px" placeholder="Ikonka" /></br>
+            Nazwa<input type="text" name="name" class="form-control" style="width:600px" placeholder="Nazwa" /></br>
+            Opis<input type="text" name="description" class="form-control" style="width:600px" placeholder="Opis" /></br>
+            Komenda/y<input type="text" name="commends" class="form-control" style="width:600px" placeholder="Komenda/y" /></br>
+            Kwota sms'a<select class="form-control" name="amount" style="width:600px;">
+            <option>0.62</option>
+            <option>1.23</option>
+            <option>2.46</option>
+            <option>3.69</option>
+            <option>4.92</option>
+            <option>6.15</option>
+            <option>7.38</option>
+            <option>11.07</option>
+            <option>12.30</option>
+            <option>13.53</option>
+            <option>17.22</option>
+            <option>23.37</option>
+            <option>24.60</option>
+            <option>30.75</option>
+            </select>
+            <br />
+            <input type="submit" class="btn btn-primary" value="Stwórz nową ofertę!" />
+        </form>
 		<br />
 		<br />
 		<div class="well" style="width:600px">
@@ -168,30 +181,31 @@ if(isset($_GET['id']))
 		{
 			{
 			?>
-			<form action="process.php" method="post" />
+			<form action="process.php" method="post">
             	<input type="hidden" name="task" value="offertsedit" />
 			Ikona<input value="<?php echo $data['icon']; ?>" type="text" name="icon" class="form-control" style="width:600px" placeholder="Ikonka" /></br>
 			Nazwa<input value="<?php echo $data['name']; ?>" type="text" name="name" class="form-control" style="width:600px" placeholder="Nazwa" /></br>
 			Opis<input value="<?php echo $data['description']; ?>" type="text" name="description" class="form-control" style="width:600px" placeholder="Opis" /></br>
 			Komenda/y<input value="<?php echo $data['commends']; ?>" type="text" name="commends" class="form-control" style="width:600px" placeholder="Komenda/y" /></br>
 			Kwota sms'a<select class="form-control" name="account" style="width:600px;">
-                <option>0.62</option>
-                <option>1.23</option>
-                <option>2.46</option>
-                <option>3.69</option>
-                <option>4.92</option>
-                <option>6.15</option>
-                <option>7.38</option>
-                <option>11.07</option>
-                <option>12.30</option>
-                <option>13.53</option>
-                <option>17.22</option>
-                <option>23.37</option>
-                <option>24.60</option>
-                <option>30.75</option>
-			</select>
-			</br>
-			<input type="submit" class="btn btn-primary" value="Zapisz zmiany w tej ofercie!" />
+                    <option>0.62</option>
+                    <option>1.23</option>
+                    <option>2.46</option>
+                    <option>3.69</option>
+                    <option>4.92</option>
+                    <option>6.15</option>
+                    <option>7.38</option>
+                    <option>11.07</option>
+                    <option>12.30</option>
+                    <option>13.53</option>
+                    <option>17.22</option>
+                    <option>23.37</option>
+                    <option>24.60</option>
+                    <option>30.75</option>
+                </select>
+                </br>
+                <input type="submit" class="btn btn-primary" value="Zapisz zmiany w tej ofercie!" />
+            </form>
 			</br>
 			</br>
 			<div class="well" style="width:600px">
