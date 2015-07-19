@@ -1,12 +1,7 @@
 <?php
-session_start();
-ob_start();
-//----------------------------------------
 require("./config.php");
-require("./include/mysql.php");
-require("./include/auth.php");
-require("./include/check.php");
-require("./include/header.php");
+require("./include.php");
+require(STYLE_DIR . "header.php");
 
 if(isLoggedIn() == TRUE)
 {
@@ -36,7 +31,7 @@ else if(isset($_GET['id']))
 <body style="background-size: 100% 100%; -moz-background-size: 100% 100%;" background="./style/img/tlo.jpg">
 	<br /><br /><br /><br /><br /><br />
     <?php
-		include( "./include/notifications.php" );
+		include(STYLE_DIR . "notifications.php");
 	?>
 	<center>
     <div style="border-top-right-radius: 20px; border-top-left-radius: 20px; width:800px" class="panel panel-success">
@@ -292,7 +287,7 @@ else if(isset($_GET['id']))
                     <th><font><font><?php echo $rowsSms['nsms']; ?></font></font></th>
                     <th><font><font><?php echo $rowsSms['asms']; ?></font></font></th>
                     <th><font><font><?php echo $rowsSms['assms']; ?></font></font></th>
-                    <th><center><font><font><?php echo '<a href="?page=smssedit&id='.$rowsSms['id'].'" class="btn btn-default">Edycja</a>' ?>&nbsp;<?php echo '<a href="process.php?task=smsdelete&id='.$rowsSms['id'].'" class="btn btn-danger">Usuń</a>' ?></font></font></center</th>
+                    <th><center><font><font><?php echo '<a href="?page=smssedit&id='.$rowsSms['id'].'" class="btn btn-default">Edycja</a>' ?>&nbsp;<?php echo '<a href="process.php?task=smsdelete&id='.$rowsSms['id'].'" class="btn btn-danger">Usuń</a>' ?></font></font></center></th>
                 </tr>
         <?php
         }

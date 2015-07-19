@@ -1,7 +1,16 @@
 <?php
+/**
+ * Folder instalacyjny
+ */
+if(is_dir("./install/"))
+{
+	header( "Location: ./install/");
+	die();
+}
+//---------------------------------------------
 require("./config.php");
-require("./include/mysql.php");
-require("./include/header.php");
+require(INCLUDES_DIR . "mysql.php");
+require(STYLE_DIR . "header.php");
 
 if(isset($_POST['id']))
 {
@@ -16,7 +25,7 @@ else if(isset($_GET['id']))
 <body style="background-size: 100% 100%; -moz-background-size: 100% 100%;" background="./style/img/tlo.jpg">
 	<br /><br /><br /><br /><br /><br />
     <?php
-		include( "./include/notifications.php" );
+		include(STYLE_DIR . "notifications.php");
 	?>   
 	<center>
 		<div class="panel panel-success" style="width:800px; border-top-left-radius: 20px; border-top-right-radius: 20px">

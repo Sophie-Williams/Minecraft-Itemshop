@@ -1,14 +1,13 @@
 <html>
 	<head>
-	<link href="../styl/css/bootstrap.css" rel="stylesheet">
-	<link href="../styl/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../style/css/bootstrap.css" rel="stylesheet">
+	<link href="../style/css/bootstrap.min.css" rel="stylesheet">
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 	<title>.: Sklep :.</title>
 	</head>
-	<body>
- 
+	<body style="background-size: 100% 100%; -moz-background-size: 100% 100%;" background="../style/img/tlo.jpg">
         <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -142,10 +141,16 @@ if($_GET['page'] == '3')
 	if($_POST['login'] && $_POST['password']) {
 		require("../config.php");
 		require("../include/mysql.php");
+		###
 		$login = mysql_real_escape_string($_POST['login']);
 		$password = mysql_real_escape_string($_POST['password']);
-		$password2 = MD5($password);
-		query_basic( "INSERT INTO `user` VALUES ('".$login."', '".$password2."', '');" );
+		###
+		$salt = hash('sha512', $login);
+		$password = hash('sha512', $salt.$password);
+		query_basic( "INSERT INTO `user` SET
+			`username` = '".$login."',
+			`password` = '".$password."',
+			`session` = '~'" );
 		header('Location: ?page=4');
 	}
 ?>

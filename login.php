@@ -1,10 +1,7 @@
 <?php
-session_start();
-ob_start();
-//----------------------------------------
 require("./config.php");
-require("./include/mysql.php");
-require("./include/header.php");
+require(INCLUDES_DIR . "mysql.php");
+require(STYLE_DIR . "header.php");
 //----------------------------------------
 ?>
 <body style="background-size: 100% 100%; -moz-background-size: 100% 100%;" background="./style/img/tlo.jpg">
