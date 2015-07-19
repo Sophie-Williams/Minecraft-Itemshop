@@ -12,7 +12,9 @@ if(isLoggedIn() == TRUE)
 		header( "Location: login.php" );
 		die();
 	}
-} else {
+}
+else
+{
 	logout();
 	header( "Location: login.php" );
 	die();

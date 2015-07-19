@@ -111,7 +111,9 @@ query_basic( "CREATE TABLE `config` (
 		`port_rcon` TEXT NOT NULL,
 		`password_rcon` TEXT NOT NULL,
 		`port` TEXT NOT NULL,
-		`api` TEXT NOT NULL
+		`api` TEXT NOT NULL,
+		`api_success` TEXT NOT NULL,
+		`api_errorcode` TEXT NOT NULL
 		) ENGINE=MyISAM;" );
 
 //User
@@ -124,7 +126,7 @@ query_basic( "CREATE TABLE `user` (
 		KEY `user` (`id`)
 		) ENGINE=MyISAM;" );
 
-query_basic( "INSERT INTO `config` VALUES ('Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień');" );
+query_basic( "INSERT INTO `config` VALUES ('Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień');" );
 
 echo '<br /><a href="?page=3" class="btn btn-primary">Dalej!</a>';
            
