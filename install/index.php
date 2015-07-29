@@ -125,6 +125,15 @@ query_basic( "CREATE TABLE `user` (
 		`session` TEXT NOT NULL,
 		KEY `user` (`id`)
 		) ENGINE=MyISAM;" );
+		
+//Voucher
+query_basic( "DROP TABLE IF EXISTS `voucher`;" );
+query_basic( "CREATE TABLE `voucher` (
+		`id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+		`code` TEXT NOT NULL,
+        `amount` int(8) NOT NULL,
+		KEY `voucher` (`id`)
+		) ENGINE=MyISAM;" );
 
 query_basic( "INSERT INTO `config` VALUES ('Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień');" );
 
