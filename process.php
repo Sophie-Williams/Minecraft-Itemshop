@@ -104,6 +104,8 @@ switch(@$task)
 		$description = mysql_real_escape_string($_POST['description']);
 		$commends = mysql_real_escape_string($_POST['commends']);
 		$amount = mysql_real_escape_string($_POST['amount']);
+		$sms = mysql_real_escape_string($_POST['sms']);
+		$voucher = mysql_real_escape_string($_POST['voucher']);
 		###
 		$error = '';
 		###
@@ -129,11 +131,27 @@ switch(@$task)
 		}
 		if(!is_numeric($amount))
 		{
-			$error .= 'Brak kwoty. ';
+			$error .= 'Błędny format kwoty. ';
 		}
 		if(query_numrows( "SELECT `csms` FROM `sms` WHERE `id` = '".$amount."'" ) == 0)
 		{
 			$error .= 'Taki sms nie istnieje. ';
+		}
+		if(empty($sms))
+		{
+			$sms = 0;
+		}
+		else if(!is_numeric($sms))
+		{
+			$error .= 'Błędny format sposobu płatności. ';
+		}
+		if(empty($voucher))
+		{
+			$voucher = 0;
+		}
+		else if(!is_numeric($voucher))
+		{
+			$error .= 'Błędny format sposobu płatności. ';
 		}
 		###
 		if(!empty($error))
@@ -150,7 +168,9 @@ switch(@$task)
 			`name` = '".$name."',
 			`description` = '".$description."',
 			`commends` = '".$commends."',
-			`amount` = '".$amount."'" );
+			`amount` = '".$amount."'
+			`sms` = '".$sms."',
+			`voucher` = '".$voucher."'" );
 		###
 		$_SESSION['msg1'] = 'Oferta o nazwie: '.$name.' została dodana!';
 		$_SESSION['msg-type'] = 'success';
@@ -207,6 +227,8 @@ switch(@$task)
 		$commends = mysql_real_escape_string($_POST['commends']);
 		$amount = mysql_real_escape_string($_POST['amount']);
 		$id = mysql_real_escape_string($_POST['id']);
+		$sms = mysql_real_escape_string($_POST['sms']);
+		$voucher = mysql_real_escape_string($_POST['voucher']);
 		###
 		$error = '';
 		###
@@ -248,6 +270,22 @@ switch(@$task)
 		{
 			$error .= 'Taka oferta nie istnieje. ';
 		}
+		if(empty($sms))
+		{
+			$sms = 0;
+		}
+		else if(!is_numeric($sms))
+		{
+			$error .= 'Błędny format sposobu płatności. ';
+		}
+		if(empty($voucher))
+		{
+			$voucher = 0;
+		}
+		else if(!is_numeric($voucher))
+		{
+			$error .= 'Błędny format sposobu płatności. ';
+		}
 		###
 		if(!empty($error))
 		{
@@ -258,7 +296,7 @@ switch(@$task)
 			die();
 		}
 		###
-		query_basic( "UPDATE `offerts` SET `icon`='".$icon."',`name`='".$name."',`description`='".$description."',`commends`='".$commends."',`amount`='".$account."' WHERE `id` = '".$id."'" );
+		query_basic( "UPDATE `offerts` SET `icon`='".$icon."',`name`='".$name."',`description`='".$description."',`commends`='".$commends."',`amount`='".$amount."', `sms`='".$sms."', `voucher`='".$voucher."' WHERE `id` = '".$id."'" );
 		###
 		$_SESSION['msg1'] = 'Pomyślnie uaktualniono ofertę o id:'.$id.'!';
 		$_SESSION['msg-type'] = 'success';
@@ -407,11 +445,11 @@ switch(@$task)
 	case 'smsdelete':
 		if(isset($_POST['id']))
 		{
-		$id = mysql_real_escape_string($_POST['id']);
+			$id = mysql_real_escape_string($_POST['id']);
 		}
 		else if(isset($_GET['id']))
 		{
-		$id = mysql_real_escape_string($_GET['id']);
+			$id = mysql_real_escape_string($_GET['id']);
 		}
 		###
 		$error = '';
@@ -508,6 +546,89 @@ switch(@$task)
 		$_SESSION['msg1'] = 'Pomyślnie uaktualniono sms o id:'.$id.'!';
 		$_SESSION['msg-type'] = 'success';
 		header( "Location: admin.php?page=4" );
+		die();
+		break;
+		
+//----------------------------------------------------
+
+	case 'voucheradd':
+		$code = mysql_real_escape_string($_POST['code']);
+		$amount = mysql_real_escape_string($_POST['amount']);
+		###
+		$error = '';
+		###
+		if(empty($amount))
+		{
+			$error .= 'Brak ilości użyć. ';
+		}
+		if(!is_numeric($amount))
+		{
+			$error .= 'Błędna ilość użyć';
+		}
+		###
+		if(!empty($error))
+		{
+			$_SESSION['msg1'] = $error;
+			$_SESSION['msg-type'] = 'danger';
+			unset($error);
+			header( "Location: admin.php?page=5" );
+			die();
+		}
+		###
+		if(empty($code))
+		{
+			$code = pass_generator();
+		}
+		###
+		query_basic( "INSERT INTO `voucher` SET
+			`code` = '".$code."',
+			`amount` = '".$amount."'" );
+		###
+		$_SESSION['msg1'] = 'Voucher został dodany!';
+		$_SESSION['msg-type'] = 'success';
+		header( "Location: admin.php?page=5" );
+		die();
+		break;
+		
+	case 'voucherdelete':
+		if(isset($_POST['id']))
+		{
+			$id = mysql_real_escape_string($_POST['id']);
+		}
+		else if(isset($_GET['id']))
+		{
+			$id = mysql_real_escape_string($_GET['id']);
+		}
+		###
+		$error = '';
+		###
+		if(empty($id))
+		{
+			$error .= 'Brak id. ';
+		}
+		if(!is_numeric($id))
+		{
+			$error .= 'Id vouchera jest nieprawidłowe. ';
+		}
+		if(query_numrows( "SELECT `code` FROM `voucher` WHERE `id` = '".$id."'" ) == 0)
+		{
+			$error .= 'Taki voicher nie istnieje. ';
+		}
+		###
+		if(!empty($error))
+		{
+			$_SESSION['msg1'] = $error;
+			$_SESSION['msg-type'] = 'danger';
+			unset($error);
+			header( "Location: admin.php?page=5" );
+			die();
+		}
+		###
+		query_basic( "DELETE FROM `voucher` WHERE `id` = '".$id."'" );
+		###
+		$_SESSION['msg1'] = 'Pomyślnie usunięto voucher o id:'.$id.'!';
+		$_SESSION['msg-type'] = 'success';
+		header( "Location: admin.php?page=5" );
 		die();
 		break;
 

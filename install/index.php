@@ -101,6 +101,8 @@ query_basic( "CREATE TABLE `offerts` (
         `commends` TEXT NOT NULL,
         `description` TEXT NOT NULL,
         `amount` int(8) NOT NULL,
+		`sms` int(1) NOT NULL,
+		`voucher` int(1) NOT NULL,
 		KEY `offerts` (`id`)
 		) ENGINE=MyISAM;" );
 

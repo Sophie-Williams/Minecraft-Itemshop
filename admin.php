@@ -160,7 +160,20 @@ else if(isset($_GET['id']))
                     <?php
                 }
                 ?>
-			</select>
+			</select><br />
+            Sposoby płatności: <br />
+                <div class="checkbox checkbox-success">
+                    <input id="checkbox" class="styled" type="checkbox" name="sms" value="1" checked>
+                    <label for="checkbox">
+                        Sms
+                    </label>
+                </div>
+                <div class="checkbox checkbox-success">
+                    <input id="checkbox1" class="styled" type="checkbox" name="voucher" value="1" checked>
+                    <label for="checkbox1">
+                        Voucher
+                    </label>
+                </div>
             <br />
             <input type="submit" class="btn btn-primary" value="Stwórz nową ofertę!" />
         </form>
@@ -187,20 +200,33 @@ else if(isset($_GET['id']))
 			<form action="process.php" method="post">
             	<input type="hidden" name="task" value="offertsedit" />
                 <input type="hidden" name="id" value="<?php echo $id; ?>" />
-			Ikona<input value="<?php echo $data['icon']; ?>" type="text" name="icon" class="form-control" style="width:600px" placeholder="Ikonka" /><br />
-			Nazwa<input value="<?php echo $data['name']; ?>" type="text" name="name" class="form-control" style="width:600px" placeholder="Nazwa" /><br />
-			Opis<input value="<?php echo $data['description']; ?>" type="text" name="description" class="form-control" style="width:600px" placeholder="Opis" /><br />
-			Komenda/y<input value="<?php echo $data['commends']; ?>" type="text" name="commends" class="form-control" style="width:600px" placeholder="Komenda/y" /><br />
-			 Kwota sms'a<select class="form-control" name="amount" style="width:600px;">
-				<?php
-                while ($rowsSms = mysql_fetch_assoc($sms))
-                {
-                    ?>
-                    <option <?php if($data['amount'] == $rowsSms['id']) {echo 'selected';} ?> value="<?php echo $rowsSms['id']; ?>">#<?php echo $rowsSms['id'].' - '.htmlspecialchars($rowsSms['asms'], ENT_QUOTES); ?> zł</option>
+                Ikona<input value="<?php echo $data['icon']; ?>" type="text" name="icon" class="form-control" style="width:600px" placeholder="Ikonka" /><br />
+                Nazwa<input value="<?php echo $data['name']; ?>" type="text" name="name" class="form-control" style="width:600px" placeholder="Nazwa" /><br />
+                Opis<input value="<?php echo $data['description']; ?>" type="text" name="description" class="form-control" style="width:600px" placeholder="Opis" /><br />
+                Komenda/y<input value="<?php echo $data['commends']; ?>" type="text" name="commends" class="form-control" style="width:600px" placeholder="Komenda/y" /><br />
+                 Kwota sms'a<select class="form-control" name="amount" style="width:600px;">
                     <?php
-                }
-                ?>
-			</select>
+                    while ($rowsSms = mysql_fetch_assoc($sms))
+                    {
+                        ?>
+                        <option <?php if($data['amount'] == $rowsSms['id']) {echo 'selected';} ?> value="<?php echo $rowsSms['id']; ?>">#<?php echo $rowsSms['id'].' - '.htmlspecialchars($rowsSms['asms'], ENT_QUOTES); ?> zł</option>
+                        <?php
+                    }
+                    ?>
+                </select><br />
+                Sposoby płatności<br />
+                    <div class="checkbox checkbox-success">
+                        <input id="checkbox" class="styled" type="checkbox" name="sms" value="1" <?php if($data['sms'] == 1) {echo 'checked';} ?>>
+                        <label for="checkbox">
+                            Sms
+                        </label>
+                    </div>
+                    <div class="checkbox checkbox-success">
+                        <input id="checkbox1" class="styled" type="checkbox" name="voucher" value="1" <?php if($data['voucher'] == 1) {echo 'checked';} ?>>
+                        <label for="checkbox1">
+                            Voucher
+                        </label>
+                    </div>
                 <br />
                 <input type="submit" class="btn btn-primary" value="Zapisz zmiany!" />
             </form>
@@ -260,7 +286,7 @@ else if(isset($_GET['id']))
             <br />
             <input type="submit" class="btn btn-primary" value="Dodaj" />
 		</form>
-    <?php
+    	<?php
 	}
 	//----------------------------------------------------
 	if($_GET['page'] == 4)
@@ -317,12 +343,10 @@ else if(isset($_GET['id']))
 	if($_GET['page'] == 'smsedit' && isset($id))
 	{
 		$data = query_fetch_assoc( "SELECT * FROM `sms` WHERE `id` = '".$id."' " ); 
-		{
-			{
-			?>
-			<form action="process.php" method="post">
-            	<input type="hidden" name="task" value="smsedit" />
-                <input type="hidden" name="id" value="<?php echo $data['id'] ?>" />
+		?>
+		<form action="process.php" method="post">
+			<input type="hidden" name="task" value="smsedit" />
+			<input type="hidden" name="id" value="<?php echo $data['id'] ?>" />
 			Treść <input style="width:600px" type="text" name="csms" value="<?php echo $data['csms'] ?>" placeholder="Treść sms" class="form-control" />
             <br />
             Numer <input style="width:600px" type="text" name="nsms" value="<?php echo $data['nsms']; ?>" placeholder="Numer sms" class="form-control" />
@@ -330,12 +354,53 @@ else if(isset($_GET['id']))
             Kwota <input style="width:600px" type="text" name="asms" value="<?php echo $data['asms']; ?>" placeholder="Kwota sms" class="form-control" />
             <br />
             Kwota doładowania <input style="width:600px" type="text" name="assms" value="<?php echo $data['assms']; ?>" placeholder="Kwota doładowania sms" class="form-control" />
-            	<br />
-                <input type="submit" class="btn btn-primary" value="Zapisz zmiany!" />
-            </form>
-			<?php
-			}
-		}
+			<br />
+			<input type="submit" class="btn btn-primary" value="Zapisz zmiany!" />
+		</form>
+		<?php
+	}
+	//----------------------------------------------------
+	if($_GET['page'] == 5)
+	{
+	?>
+        <a href="?page=voucheradd" class="btn btn-info">Dodaj nowy voucher</a>
+        <br />
+        <br />
+        <table class="table table-striped table-hover">
+            <tr>
+                <td>Id</td>
+                <td>Kod</td>
+                <td>Ilość użyć</td>
+                <td><center>Opcja</center></td>
+            </tr>
+		<?php
+        $voucher = mysql_query( "SELECT * FROM `voucher` ORDER BY `id`" ); 
+        while($rowsVoucher = mysql_fetch_assoc($voucher))
+		{
+        ?>
+            <div class="bs-example table-responsive">
+                <tr>
+                    <th><font><font><?php echo $rowsVoucher['id']; ?></font></font></th>
+                    <th><font><font><?php echo $rowsVoucher['code']; ?></font></font></th>
+                    <th><font><font><?php echo $rowsVoucher['amount']; ?></font></font></th>
+                    <th><center><font><font><?php echo '<a href="?page=voucherdelete&id='.$rowsVoucher['id'].'" class="btn btn-default">Usuń</a>' ?></font></font></center></th>
+                </tr>
+        <?php
+        }
+	}
+	//----------------------------------------------------
+	if($_GET['page'] == 'voucheradd')
+	{
+		?>
+		<form action="process.php" method="post">
+            <input type="hidden" value="voucheradd" name="task" />
+            Kod(pozostaw puste aby wygenerować losowy kod) <input style="width:600px" type="text" name="code" placeholder="Kod" class="form-control" />
+            <br />
+            Ilość użyć <input style="width:600px" type="text" name="amount" placeholder="Ilość użyć" class="form-control" />
+            <br />
+            <input type="submit" class="btn btn-primary" value="Dodaj" />
+		</form>
+    	<?php
 	}
 	?>
 	             </div>

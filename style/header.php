@@ -2,8 +2,12 @@
  <head>
   <link href="./style/css/bootstrap.css" rel="stylesheet">
   <link href="./style/css/bootstrap.min.css" rel="stylesheet">
+  <link href="./style/css/font/css/font-awesome.css" rel="stylesheet">
+  <link href="./style/css/build.css" rel="stylesheet">
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="./style/js/bootstrap.js"></script>
+  <script src="./style/js/bootstrap.min.js"></script>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
   <title>.: Sklep :.</title>
  </head>
