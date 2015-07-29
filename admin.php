@@ -383,7 +383,7 @@ else if(isset($_GET['id']))
                     <th><font><font><?php echo $rowsVoucher['id']; ?></font></font></th>
                     <th><font><font><?php echo $rowsVoucher['code']; ?></font></font></th>
                     <th><font><font><?php echo $rowsVoucher['amount']; ?></font></font></th>
-                    <th><center><font><font><?php echo '<a href="?page=voucherdelete&id='.$rowsVoucher['id'].'" class="btn btn-default">Usuń</a>' ?></font></font></center></th>
+                    <th><center><font><font><?php echo '<a href="process.php?task=voucherdelete&id='.$rowsVoucher['id'].'" class="btn btn-default">Usuń</a>' ?></font></font></center></th>
                 </tr>
         <?php
         }
