@@ -1,10 +1,10 @@
 <?php
-require("./config.php");
+require("../config.php");
 require(INCLUDES_DIR . "mysql.php");
-require(STYLE_DIR . "header.php");
+require(STYLE2_DIR . "header.php");
 //----------------------------------------
 ?>
-<body style="background-size: 100% 100%; -moz-background-size: 100% 100%;" background="./style/img/tlo.jpg">
+<body style="background-size: 100% 100%; -moz-background-size: 100% 100%;" background="../style/img/tlo.jpg">
 	<br /><br /><br /><br /><br /><br />
 	<center>
     	<div class="panel panel-success" style="width:800px;">

@@ -1,7 +1,7 @@
 <?php
-require("./config.php");
-require("./include.php");
-require(STYLE_DIR . "header.php");
+require("../config.php");
+require("../include.php");
+require(STYLE2_DIR . "header.php");
 
 if(isLoggedIn() == TRUE)
 {
@@ -30,7 +30,7 @@ else if(isset($_GET['id']))
 }
 //----------------------------------------
 ?>
-<body style="background-size: 100% 100%; -moz-background-size: 100% 100%;" background="./style/img/tlo.jpg">
+<body style="background-size: 100% 100%; -moz-background-size: 100% 100%;" background="../style/img/tlo.jpg">
 	<br /><br /><br /><br /><br /><br />
     <?php
 		include(STYLE_DIR . "notifications.php");

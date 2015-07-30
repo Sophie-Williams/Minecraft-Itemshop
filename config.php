@@ -25,6 +25,7 @@ define('BASE_URL', dirname($_SERVER['PHP_SELF']).'/');
 define('INSTALL_DIR', DIR.'/install/');
 define('LIBS_DIR', DIR.'/libs/');
 define('STYLE_DIR', DIR.'/style/');
+define('STYLE2_DIR', DIR.'/admin/style/');
 define('INCLUDES_DIR', DIR.'/include/');
 	
 define('REQUEST_URI', $_SERVER["REQUEST_URI"]);

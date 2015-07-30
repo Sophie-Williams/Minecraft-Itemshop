@@ -1,9 +1,9 @@
 <?php
 session_start();
 ob_start();
-require("./config.php");
-require("./include/mysql.php");
-require("./include/auth.php");
+require("../config.php");
+require(INCLUDES_DIR . "mysql.php");
+require(INCLUDES_DIR . "auth.php");
 
 
 if(isset($_POST['task']))
