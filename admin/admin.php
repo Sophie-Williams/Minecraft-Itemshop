@@ -1,4 +1,11 @@
 <?php
+/*
+Projekt sklepu do gry minecraft
+stworzony przez użytkownika Najlepszy56
+www.github.com/najlepszy56.
+Udostępnianie bez zgody właściciela
+jest naruszeniem zasad licencji.
+*/
 require("../config.php");
 require("./include.php");
 require(STYLE2_DIR . "header.php");
@@ -26,7 +33,7 @@ if($_GET['page'] == '1')
 		<br />
 		Port serwera<input placeholder="Port serwera np. 25565" value='<?php echo $data['port']  ?>' style="width:600px" type="text" class="form-control" name="port">
 		<br />
-		Api<input placeholder="Port serwera np. http://fiberhost.pl/api/payment/api_code_verify.php?payment=homepay_sms&amount={ASSMS}&code={CODE}&userid=6890" value='<?php echo $data['api']  ?>' style="width:600px" type="text" class="form-control" name="api">
+		Api<input placeholder="Api np. http://mintshost.pl/sms.php?kod={CODE}&sms={NSMS}" value='<?php echo $data['api']  ?>' style="width:600px" type="text" class="form-control" name="api">
 		<br />
         Api - odpowiedź(kod poprawny)<input placeholder='Api - odpowiedź(kod poprawny) np. {"status":"OK","kwota":"{ASSMS}"}' value='<?php echo $data['api_success']  ?>' style="width:600px" type="text" class="form-control" name="api_success">
         <br />

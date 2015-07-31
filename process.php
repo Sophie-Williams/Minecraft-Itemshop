@@ -1,4 +1,11 @@
 <?php
+/*
+Projekt sklepu do gry minecraft
+stworzony przez użytkownika Najlepszy56
+www.github.com/najlepszy56.
+Udostępnianie bez zgody właściciela
+jest naruszeniem zasad licencji.
+*/
 require("./config.php");
 require("./include.php");
 
@@ -81,14 +88,13 @@ switch(@$payment)
 			###
 			$api = file_get_contents($apicreate);
 			###
-
-			if(strstr($api, $api_errorcode) == TRUE)
+			if(trim($api) == trim($api_errorcode))
 			{
 				notifications('Błędny kod sms!', 'danger');
 				header( "Location: product.php?id=".$id."&payment=".$payment."" );
 				die();
 			}
-			else if(strstr($api, $api_success) == TRUE)
+			else if(trim($api) == trim($api_success))
 			{
 				define('MQ_SERVER_ADDR', $config['ip']) ;
 				define('MQ_SERVER_PORT', $config['port_rcon']);

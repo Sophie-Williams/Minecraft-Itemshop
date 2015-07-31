@@ -1,4 +1,11 @@
 <?php
+/*
+Projekt sklepu do gry minecraft
+stworzony przez użytkownika Najlepszy56
+www.github.com/najlepszy56.
+Udostępnianie bez zgody właściciela
+jest naruszeniem zasad licencji.
+*/
 require("./config.php");
 require("./include.php");
 require(STYLE_DIR . "header.php");
