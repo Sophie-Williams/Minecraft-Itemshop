@@ -81,13 +81,14 @@ switch(@$payment)
 			###
 			$api = file_get_contents($apicreate);
 			###
-			if($api == $api_errorcode)
+
+			if(strstr($api, $api_errorcode) == TRUE)
 			{
 				notifications('Błędny kod sms!', 'danger');
 				header( "Location: product.php?id=".$id."&payment=".$payment."" );
 				die();
 			}
-			else if($api == $api_success)
+			else if(strstr($api, $api_success) == TRUE)
 			{
 				define('MQ_SERVER_ADDR', $config['ip']) ;
 				define('MQ_SERVER_PORT', $config['port_rcon']);
