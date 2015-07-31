@@ -1,6 +1,4 @@
 <?php
-session_start();
-ob_start();
 require("./config.php");
 require("./include.php");
 
@@ -54,18 +52,18 @@ switch(@$payment)
 		}
 		if($lenghtNick < 3)
 		{
-			$error .= 'Nick jest za krótki';
+			$error .= 'Nick jest za krótki. ';
 		}
 		if($lenghtCode < 3)
 		{
-			$error .= 'Kod jest za krótki';
+			$error .= 'Kod jest za krótki. ';
 		}
 		###
 		if(!empty($error))
 		{
 			notifications($error, 'danger');
 			unset($error);
-			header( "Location: product.php?id=$id&payment=$payment" );
+			header( "Location: product.php?id=".$id."&payment=".$payment."" );
 			die();
 		}
 		###
@@ -78,12 +76,52 @@ switch(@$payment)
 			$by = array("{CODE}", "{NSMS}", "{ASMS}", "{ASSMS}");
 			$after = array($code, $sms['nsms'], $sms['asms'], $sms['assms']);
 			$apicreate = str_replace($by, $after, $config['api']);
+			$api_success = str_replace($by, $after, $config['api_success']);
+			$api_errorcode = str_replace($by, $after, $config['api_errorcode']);
 			###
-			$api = @file_get_contents($apicreate);
+			$api = file_get_contents($apicreate);
 			###
-			
-			
-			//DOKOŃCZYĆ
+			if($api == $api_errorcode)
+			{
+				notifications('Błędny kod sms!', 'danger');
+				header( "Location: product.php?id=".$id."&payment=".$payment."" );
+				die();
+			}
+			else if($api == $api_success)
+			{
+				define('MQ_SERVER_ADDR', $config['ip']) ;
+				define('MQ_SERVER_PORT', $config['port_rcon']);
+				define('MQ_SERVER_PASS', $config['password_rcon']);
+				define('MQ_TIMEOUT', 2 );
+				###
+				include(INCLUDES_DIR . "rcon.php");
+				###
+				$Rcon = new MinecraftRcon;
+				$Rcon->Connect( MQ_SERVER_ADDR, MQ_SERVER_PORT, MQ_SERVER_PASS, MQ_TIMEOUT );
+									
+				$offerts = mysql_query("SELECT * FROM `offerts` WHERE `id` = '".$id."'");
+				while($rowsOfferts = @mysql_fetch_assoc($offerts))
+				{
+					$commends = explode(",", $rowsOfferts['commends']);
+					$output = count($commends);
+					###
+					for($i=0; $i<$output; $i++)
+					{
+						$by = array("{NICK}");
+						$after = array($nick);
+						###
+						$commends[$i] = str_replace($by, $after, $commends[$i]);
+						$data = $Rcon->Command($commends[$i]);
+					}
+				}
+				$Rcon->Disconnect();
+			}
+			else
+			{
+				notifications('Błąd api! '.$api.'', 'danger');
+				header( "Location: product.php?id=".$id."&payment=".$payment."" );
+				die();
+			}
 		}
 		###
 		notifications('Usługa została poprawnie przydzielona!', 'success');

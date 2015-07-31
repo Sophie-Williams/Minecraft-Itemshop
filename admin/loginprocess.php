@@ -3,6 +3,8 @@ session_start();
 ob_start();
 require("../config.php");
 require(INCLUDES_DIR . "mysql.php");
+require(INCLUDES_DIR . "check.php");
+require(INCLUDES_DIR . "func.php");
 require(INCLUDES_DIR . "auth.php");
 
 
@@ -16,7 +18,7 @@ else if(isset($_GET['task']))
 }
 
 
-//--------------------------------------------
+//----------------------------------------------------+
 
 
 switch(@$task)
@@ -48,7 +50,7 @@ switch(@$task)
 				###
 				$_SESSION['msg1'] = 'Zostałeś poprawnie zalogowany!';
 				$_SESSION['msg-type'] = 'success';
-				header( "Location: admin.php" );
+				header( "Location: admin.php?page=1" );
 				die();
 			}
 		}

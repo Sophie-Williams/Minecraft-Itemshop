@@ -1,30 +1,9 @@
 <?php
 session_start();
 ob_start();
-//----------------------------------------
+//----------------------------------------------------+
 require("../config.php");
-require(INCLUDES_DIR . "mysql.php");
-require(INCLUDES_DIR . "auth.php");
-require(INCLUDES_DIR . "check.php");
-
-if(isLoggedIn() == TRUE)
-{
-	$verify = query_fetch_assoc( "SELECT * FROM `user` WHERE `id` = '".$_SESSION['id']."'" );
-	if(($verify['username'] != $_SESSION['username']) || ($verify['session'] != session_id()))
-	{
-		logout();
-		header( "Location: login.php" );
-		die();
-	}
-}
-else
-{
-	logout();
-	header( "Location: login.php" );
-	die();
-}
-//----------------------------------------
-
+require("./include.php");
 
 if(isset($_POST['task']))
 {
@@ -36,7 +15,7 @@ else if(isset($_GET['task']))
 }
 
 
-//--------------------------------------------
+//----------------------------------------------------+
 
 
 switch(@$task)
@@ -47,6 +26,8 @@ switch(@$task)
 		$ip = mysql_real_escape_string($_POST['ip']);
 		$port = mysql_real_escape_string($_POST['port']);
 		$api = mysql_real_escape_string($_POST['api']);
+		$api_success = mysql_real_escape_string($_POST['api_success']);
+		$api_errorcode = mysql_real_escape_string($_POST['api_errorcode']);
 		###
 		$error = '';
 		###
@@ -78,6 +59,14 @@ switch(@$task)
 		{
 			$error .= 'Brak api operatora sms. ';
 		}
+		if(empty($api_success))
+		{
+			$error .= 'Brak api success code';
+		}
+		if(empty($api_errorcode))
+		{
+			$error .= 'Brak api error code';
+		}
 		###
 		if(!empty($error))
 		{
@@ -88,7 +77,7 @@ switch(@$task)
 			die();
 		}
 		###
-		query_basic( "UPDATE `config` SET `ip`='".$ip."',`port_rcon`='".$port_rcon."',`password_rcon`='".$password_rcon."',`port`='".$port."', `api`='".$api."' WHERE 1" );
+		query_basic( "UPDATE `config` SET `ip`='".$ip."',`port_rcon`='".$port_rcon."',`password_rcon`='".$password_rcon."',`port`='".$port."', `api`='".$api."', `api_success`='".$api_success."', `api_errorcode`='".$api_errorcode."' WHERE 1" );
 		###
 		$_SESSION['msg1'] = 'Dane zostały poprawnie uaktualnione!';
 		$_SESSION['msg-type'] = 'success';
@@ -96,7 +85,7 @@ switch(@$task)
 		die();
 		break;
 		
-//----------------------------------------------------
+//----------------------------------------------------+
 		
 	case 'offertsadd':
 		$icon = mysql_real_escape_string($_POST['icon']);
@@ -304,7 +293,7 @@ switch(@$task)
 		die();
 		break;
 
-//----------------------------------------------------
+//----------------------------------------------------+
 		
 	case 'menuadd':
 		$position = mysql_real_escape_string($_POST['position']);
@@ -549,7 +538,7 @@ switch(@$task)
 		die();
 		break;
 		
-//----------------------------------------------------
+//----------------------------------------------------+
 
 	case 'voucheradd':
 		$code = mysql_real_escape_string($_POST['code']);
