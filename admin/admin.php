@@ -342,5 +342,33 @@ if($_GET['page'] == 'voucheradd')
 	</form>
 <?php
 }
+//----------------------------------------------------+
+if($_GET['page'] == 6)
+{
+?>
+	<a href="?process.php?task=logdelete" class="btn btn-info">Wyczyść logi</a>
+	<br />
+	<br />
+	<table class="table table-striped table-hover">
+		<tr>
+			<td>Id</td>
+			<td>Wiadomość</td>
+			<td>Status</td>
+			<td>Data</td>
+		</tr>
+<?php
+	$log = mysql_query( "SELECT * FROM `log` ORDER BY `id`" ); 
+	while($rowsLog = mysql_fetch_assoc($log))
+	{
+?>
+		<tr>
+			<th><font><font><?php echo $rowsLog['id']; ?></font></font></th>
+			<th><font><font><?php echo $rowsLog['message']; ?></font></font></th>
+			<th><font><font><?php echo $rowsLog['status']; ?></font></font></th>
+			<th><font><font><?php echo $rowsLog['date']; ?></font></font></th>
+		</tr>
+        <?php
+	}
+}
 require(STYLE2_DIR . "footer.php");
 ?>

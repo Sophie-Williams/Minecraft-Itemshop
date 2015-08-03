@@ -89,7 +89,7 @@ query_basic( "CREATE TABLE `sms` (
 		  `nsms` TEXT NOT NULL,
 		  `asms` TEXT NOT NULL,
 		  `assms` TEXT NOT NULL,
-		  KEY `sms` (`id`)
+		  PRIMARY KEY `sms` (`id`)
 		) ENGINE=MyISAM;" );
 		
 //Oferts
@@ -103,7 +103,7 @@ query_basic( "CREATE TABLE `offerts` (
         `amount` int(8) NOT NULL,
 		`sms` int(1) NOT NULL,
 		`voucher` int(1) NOT NULL,
-		KEY `offerts` (`id`)
+		PRIMARY KEY `offerts` (`id`)
 		) ENGINE=MyISAM;" );
 
 //config
@@ -125,7 +125,7 @@ query_basic( "CREATE TABLE `user` (
 		`username` TEXT NOT NULL,
         `password` TEXT NOT NULL,
 		`session` TEXT NOT NULL,
-		KEY `user` (`id`)
+		PRIMARY KEY `user` (`id`)
 		) ENGINE=MyISAM;" );
 		
 //Voucher
@@ -134,7 +134,18 @@ query_basic( "CREATE TABLE `voucher` (
 		`id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
 		`code` TEXT NOT NULL,
         `amount` int(8) NOT NULL,
-		KEY `voucher` (`id`)
+		PRIMARY KEY `voucher` (`id`)
+		) ENGINE=MyISAM;" );
+		
+//Log
+query_basic( "DROP TABLE IF EXISTS `log`;" );
+query_basic( "CREATE TABLE `log` (
+		`id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+		`offertsid` int(8) UNSIGNED NULL,
+		`message` text NOT NULL,
+		`status` text NOT NULL,
+		`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM;" );
 
 query_basic( "INSERT INTO `config` VALUES ('Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień', 'Zmień');" );

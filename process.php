@@ -131,6 +131,12 @@ switch(@$payment)
 			}
 		}
 		###
+		query_basic( "INSERT INTO `log` SET
+			`offertsid` = '".$offertsid."',
+			`message` = 'Gracz: '".$nick."' kupił ofertę o id: '".$id."'',
+			`status` = 'success',
+			`date` = '".date('Y-m-d G:i:s')."'" );
+		###
 		notifications('Usługa została poprawnie przydzielona!', 'success');
 		header( "Location: index.php" );
 		die();
@@ -217,6 +223,12 @@ switch(@$payment)
 			}
 		}
 		$Rcon->Disconnect();
+		###
+		query_basic( "INSERT INTO `log` SET
+			`offertsid` = '".$offertsid."',
+			`message` = 'Gracz: '".$nick."' dostał ofertę o id: '".$id."'',
+			`status` = 'success',
+			`date` = '".date('Y-m-d G:i:s')."'" );
 		###
 		notifications('Usługa została poprawnie przydzielona!', 'success');
 		header( "Location: index.php" );

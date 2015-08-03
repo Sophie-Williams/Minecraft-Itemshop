@@ -66,6 +66,7 @@
                         <li <?php if($_GET['page'] == 3) {echo 'class="active"';} ?>><a href="?page=3"><font><font>Menu</font></font></a></li>
                         <li <?php if($_GET['page'] == 4) {echo 'class="active"';} ?>><a href="?page=4"><font><font>Sms</font></font></a></li>
                         <li <?php if($_GET['page'] == 5) {echo 'class="active"';} ?>><a href="?page=5"><font><font>Voucher</font></font></a></li>
+                        <li <?php if($_GET['page'] == 6) {echo 'class="active"';} ?>><a href="?page=6"><font><font>Logi</font></font></a></li>
                       </ul>
                       <ul class="nav navbar-nav navbar-right">
                         <li><a href="loginprocess.php?task=logout"><font><font>Wyloguj</font></font></a></li>

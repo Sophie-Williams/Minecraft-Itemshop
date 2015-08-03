@@ -627,6 +627,14 @@ switch(@$task)
 		header( "Location: admin.php?page=5" );
 		die();
 		break;
+		
+	case 'logdelete':
+		query_basic( "TRUNCATE `log`" );
+		$_SESSION['msg1'] = 'Logi zostały usunięte!';
+		$_SESSION['msg-type'] = 'success';
+		header( "Location: admin.php?page=6" );
+		die();
+		break;
 
 	default:
 		exit('<h1><b>Błąd</b></h1>');
